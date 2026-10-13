@@ -73,7 +73,13 @@ class HttpBibleRepository implements IBibleRepository {
       probes.map(async (n) => {
         try {
           const res = await fetch(chapterFileUrl(bookId, n), { method: "HEAD" });
-          return res.ok ? n : null;
+          // Importante: tanto Vite (dev) como el WebView de Tauri (prod)
+          // resuelven rutas no encontradas con un fallback del SPA
+          // (devuelven index.html con Content-Type: text/html y status 200).
+          // Validar solo `res.ok` haría creer que el capítulo existe.
+          // Comprobamos Content-Type para distinguir un JSON real del HTML.
+          const contentType = res.headers.get("content-type") ?? "";
+          return res.ok && contentType.includes("application/json") ? n : null;
         } catch {
           return null;
         }
