@@ -14,10 +14,9 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Path aliases (mismo @/ que en translate-bible) */
-    "baseUrl": ".",
+    /* Path aliases (relativo a este tsconfig.json; no requiere baseUrl). */
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Linting */
